@@ -28,7 +28,7 @@ def get_news(search):
     gn = GoogleNews(region='US')
     gn.set_lang('en')
     gn.set_encode('utf-8')
-    gn.set_period(str(30) + 'd')  # 30d
+    gn.set_period('30d')
     gn.get_news(search)
     search_result = gn.results()
     data = pd.DataFrame(search_result)
