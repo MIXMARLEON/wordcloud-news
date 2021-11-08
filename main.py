@@ -5,14 +5,30 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from PIL import Image
 
+"""
 
-def get_news(search, lang='en', region='US', period_days=30):
-    # Returns pandas dataframe with data
+This code collecting news from news.google.com and use titles for generate 
+word cloud. In this code I collected data about Russia from US region and 
+made cloud from conture of Russia in tricolor.
 
-    gn = GoogleNews(region=region)
-    gn.set_lang(lang)
+"""
+
+
+def get_news(search):
+
+    """
+    This function returns data frame with columns:
+    title, desc, date, datetime, link, img, media, site
+
+    :param str search: String by which you want to search for news.
+
+    :return pd.DataFrame: Pandas data frame.
+    """
+
+    gn = GoogleNews(region='US')
+    gn.set_lang('en')
     gn.set_encode('utf-8')
-    gn.set_period(str(period_days) + 'd')  # 30d
+    gn.set_period(str(30) + 'd')  # 30d
     gn.get_news(search)
     search_result = gn.results()
     data = pd.DataFrame(search_result)
@@ -22,6 +38,7 @@ def get_news(search, lang='en', region='US', period_days=30):
 
 russia = get_news("Russia")
 
+#  Collecting titles
 titles = ''
 for row in russia['title']:
     titles += str(row) + "; "
@@ -36,9 +53,11 @@ custom_stopwords = ["CNN", "BBC", "New", "York", "Times", "Russia", "Russian",
 for string in custom_stopwords:
     stopwords.add(string)
 
-mask = np.array(Image.open('flag_map_of_russia.png'))
+mask = np.array(Image.open('flag_map_of_russia.png'))  # image for mask
 wc = wordcloud.WordCloud(stopwords=stopwords, background_color='white', mask=mask,
                          width=1224, height=612, contour_color='black')
+
+# Generates colors for text using image color
 wc.generate(titles)
 image_colors = wordcloud.ImageColorGenerator(mask)
 wc.recolor(color_func=image_colors)
