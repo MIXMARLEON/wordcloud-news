@@ -3,7 +3,7 @@ import wordcloud
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from PIL import Image
+from PIL import Image, ImageDraw
 
 """
 
@@ -55,12 +55,13 @@ for string in custom_stopwords:
 
 mask = np.array(Image.open('flag_map_of_russia.png'))  # image for mask
 wc = wordcloud.WordCloud(stopwords=stopwords, background_color='white', mask=mask,
-                         width=1224, height=612, contour_color='black')
+                         width=1224, height=612, contour_color=None)
 
 # Generates colors for text using image color
 wc.generate(titles)
 image_colors = wordcloud.ImageColorGenerator(mask)
 wc.recolor(color_func=image_colors)
+wc.to_file("result.png")
 
 plt.imshow(wc)
 plt.xticks([])
