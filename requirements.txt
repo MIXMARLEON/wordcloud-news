@@ -1,0 +1,7 @@
+GoogleNews
+wordcloud
+pillow
+matplotlib
+numpy
+pandas
+pip
